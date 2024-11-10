@@ -2,5 +2,6 @@ using QubitSimulator
 using Test
 
 @testset "QubitSimulator.jl" begin
-    # Write your tests here.
+    include("qubits.jl")
+    include("hardwaremodel.jl")
 end
