@@ -5,7 +5,7 @@ using LinearAlgebra
 using TeNe
 
 # Imports
-import TeNe: LatticeTypes, Bosons, OpList, StateOperator, LiouvilleWrapper, exp, dim, add!
+import TeNe: LatticeTypes, Bosons, OpList, LiouvilleWrapper, exp, dim, totensor
 import LinearAlgebra: ones
 
 include("qubits.jl")

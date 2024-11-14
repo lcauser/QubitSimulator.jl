@@ -44,7 +44,39 @@
                 end
             end
             @test real(rates) < 1e-10
-            @test imag(Rates)
+            @test imag(rates) < 1e-10
         end
+    end
+
+    # Test T1 times 
+    begin
+        model = randommodel(3, 1)
+
+        # artifically set properties to just to see effects of T1
+        model.qubits[1].T2 = 1e10
+        T1 = model.qubits[1].T1
+        ts = 0.0:T1/100:2*T1
+        occs = []
+        st = state(model.lt, "1")
+        for t in ts
+            push!(occs, sum(st .* exp(t*superop(model, 1)) * st))
+        end
+        @test isapprox(occs, exp.(-ts ./ T1))
+    end
+
+    # Test T2 times 
+    begin
+        model = randommodel(3, 1)
+
+        # artifically set properties to just to see effects of T1
+        model.qubits[1].T1 = 1e10
+        T2 = model.qubits[1].T2
+        ts = 0.0:T2/100:2*T2
+        occs = []
+        st = kron([sqrt(0.5), sqrt(0.5), 0], [sqrt(0.5), sqrt(0.5), 0])
+        for t in ts
+            push!(occs, sum((exp(t*superop(model, 1)) * st))-1)
+        end
+        @test isapprox(occs, exp.(-ts ./ T2))
     end
 end
