@@ -46,8 +46,6 @@ function superop(model::HardwareModel, qubits::Int...)
         qu = qubit(model, idx)
 
         # Add the Hamiltonian
-        #add!(ops, "n_id", ctr, -1im*qu.frequency)
-        #add!(ops, "id_n", ctr, 1im*qu.frequency)
         add!(ops, "n2_id", ctr, -1im*qu.anharmonicity/2)
         add!(ops, "id_n2", ctr, 1im*qu.anharmonicity/2)
 
