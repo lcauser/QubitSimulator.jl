@@ -4,7 +4,8 @@
         begin
             # test initialization 
             model = QubitCollection(n)
-            @test dim(model.lt) == n^2
+            @test dim(model.hilbert) == n
+            @test dim(model.liouville) == n^2
 
             # test adding
             addqubit!(model, randomqubit(n))
@@ -29,7 +30,7 @@
         model = randommodel(3, 5)
         proj = zeros(9)
         for i = 1:3
-            proj += state(model.lt, string(i-1))
+            proj += state(model.liouville, string(i-1))
         end
         @test isapprox(sum(proj), 3.0)
         for i = 1:5
@@ -37,9 +38,9 @@
             op = superop(model, i)
             @test size(op) == (9, 9)
             for j = 1:3
-                st = state(model.lt, string(j-1))
+                st = state(model.liouville, string(j-1))
                 for k = 1:3
-                    st2 = state(model.lt, string(k-1))
+                    st2 = state(model.liouville, string(k-1))
                     rates += transpose(st) * op * st2
                 end
             end
@@ -57,7 +58,7 @@
         T1 = model.qubits[1].T1
         ts = 0.0:T1/100:2*T1
         occs = []
-        st = state(model.lt, "1")
+        st = state(model.liouville, "1")
         for t in ts
             push!(occs, sum(st .* exp(t*superop(model, 1)) * st))
         end

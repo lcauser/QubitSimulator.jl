@@ -3,7 +3,8 @@
 =#
 
 mutable struct QubitCollection{n}
-    lt::LatticeTypes
+    hilbert::LatticeTypes 
+    liouville::LatticeTypes
     qubits::Vector{Qubit{n}}
 end
 
@@ -13,6 +14,7 @@ function QubitCollection(n::Int)
     add!(lt, "z", op(lt, "id")-2*op(lt, "n"))
     add!(lt, "zdagz", adjoint(op(lt, "z"))*op(lt, "z"))
     return QubitCollection(
+        lt,
         LiouvilleWrapper(lt),
         Qubit{n}[]
     )
@@ -38,9 +40,32 @@ function randommodel(n::Int, num_qubits::Int; kwargs...)
     return model
 end
 
+export hamiltonian
+"""
+    hamiltonian(model::QubitCollection, qubits::Int...)
+
+Determine the effective Hamiltonian for given qubits.
+"""
+function hamiltonian(model::QubitCollection, qubits::Int...)
+    ops = OpList(model.hilbert, length(qubits))
+    ctr = 1
+    for idx in qubits
+        qu = qubit(model, idx)
+        add!(ops, "n2", ctr, qu.anharmonicity/2)
+        add!(ops, "n_id", ctr, -0.5im/qu.T1)
+        add!(ops, "zdagz", ctr, -0.25im/qu.T2)
+        ctr += 1
+    end
+end
+
 export superop
+"""
+    superop(model::QubitCollection, qubits::Int...)
+
+Determine the super operator for given qubits.
+"""
 function superop(model::QubitCollection, qubits::Int...)
-    ops = OpList(model.lt, length(qubits))
+    ops = OpList(model.liouville, length(qubits))
     ctr = 1
     for idx in qubits
         qu = qubit(model, idx)
