@@ -1,9 +1,9 @@
-@testset begin "HardwareModel"
+@testset begin "QubitCollection"
     # Test base model
     for n = 2:4
         begin
             # test initialization 
-            model = HardwareModel(n)
+            model = QubitCollection(n)
             @test dim(model.lt) == n^2
 
             # test adding

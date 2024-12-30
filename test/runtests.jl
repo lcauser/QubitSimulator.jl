@@ -4,5 +4,5 @@ using TeNe
 
 @testset "QubitSimulator.jl" begin
     include("qubits.jl")
-    include("hardwaremodel.jl")
+    include("QubitCollection.jl")
 end

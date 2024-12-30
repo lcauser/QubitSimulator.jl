@@ -2,35 +2,35 @@
     Models a collection of qubit and its pulse channels.
 =#
 
-mutable struct HardwareModel{n}
+mutable struct QubitCollection{n}
     lt::LatticeTypes
     qubits::Vector{Qubit{n}}
 end
 
-export HardwareModel
-function HardwareModel(n::Int)
+export QubitCollection
+function QubitCollection(n::Int)
     lt = Bosons(n)
     add!(lt, "z", op(lt, "id")-2*op(lt, "n"))
     add!(lt, "zdagz", adjoint(op(lt, "z"))*op(lt, "z"))
-    return HardwareModel(
+    return QubitCollection(
         LiouvilleWrapper(lt),
         Qubit{n}[]
     )
 end
 
-levels(model::HardwareModel{n}) where {n} = n
+levels(model::QubitCollection{n}) where {n} = n
 
 export qubit
-qubit(model::HardwareModel, idx::Int) = model.qubits[idx]
+qubit(model::QubitCollection, idx::Int) = model.qubits[idx]
 
 export addqubit!
-function addqubit!(model::HardwareModel, qubit::Qubit)
+function addqubit!(model::QubitCollection, qubit::Qubit)
     push!(model.qubits, qubit)
 end
 
 export randommodel
 function randommodel(n::Int, num_qubits::Int; kwargs...)
-    model = HardwareModel(n)
+    model = QubitCollection(n)
     for _ in Base.OneTo(num_qubits)
         addqubit!(model, randomqubit(n; kwargs...))
     end
@@ -39,7 +39,7 @@ function randommodel(n::Int, num_qubits::Int; kwargs...)
 end
 
 export superop
-function superop(model::HardwareModel, qubits::Int...)
+function superop(model::QubitCollection, qubits::Int...)
     ops = OpList(model.lt, length(qubits))
     ctr = 1
     for idx in qubits
