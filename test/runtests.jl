@@ -2,8 +2,8 @@ using QubitSimulator
 using Test
 using TeNe
 
-@testset "QubitSimulator.jl" begin
-    include("qubits.jl")
-    include("QubitCollection.jl")
-    include("pulses.jl")
+@testset "Unit Testing" begin
+    include("unit/qubits/qubit.jl")
+    #include("unit/qubits/qubitcollection.jl")
+    #include("unit/pulses/pulses.jl")
 end

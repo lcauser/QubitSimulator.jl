@@ -8,8 +8,13 @@ using TeNe
 import TeNe: LatticeTypes, Bosons, OpList, LiouvilleWrapper, exp, dim, totensor
 import LinearAlgebra: ones
 
-include("qubits.jl")
-include("QubitCollection.jl")
-include("pulses.jl")
+include("basis.jl")
+
+### Qubits
+include("qubits/qubit.jl")
+#include("qubits/qubitcollection.jl")
+
+# Pulses
+#include("pulses/pulses.jl")
 
 end
