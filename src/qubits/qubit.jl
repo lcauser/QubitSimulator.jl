@@ -66,6 +66,7 @@ struct Qubit
     end
 end
 
+### Unsafe matrix calculations
 function _calculate_H0(hilbert::LatticeTypes, η::Float64)
     return 0.5*η*op(hilbert, "n2")
 end
@@ -73,8 +74,8 @@ end
 function _calculate_Heff(hilbert::LatticeTypes, η::Float64, T1::Float64, T2::Float64)
     return (
         0.5*η*op(hilbert, "n2")
-        - 0.5im * T1 * op(hilbert, "n")
-        - 0.25im * T2 * op(hilbert, "zdagz")
+        - 0.5im * (1 / T1) * op(hilbert, "n")
+        - 0.5im * (0.5 / T2) * op(hilbert, "zdagz")
     )
 end
 
