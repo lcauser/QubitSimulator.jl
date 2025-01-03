@@ -30,26 +30,37 @@ export width
 Returns the duration of a pulse.
 """
 function width(pulse::Pulse)
-    if !hasproperty(pulse, "width")
+    if !hasproperty(pulse, :width)
         throw(ArgumentError("Pulse does not have a defined width."))
     end
     return pulse.width
 end
 
-function creategate(lt::LatticeTypes, qubit::Qubit, pulse::Pulse; phase::Float64=0.0, steps::Int=100)
-    Ωs = shape(pulse; steps=steps)
-    Δt = width(pulse) / steps 
-    
-    # we need to average the pulse over intervals 
-    Ωs = 0.5 * (Ωs[firstindex(Ωs):lastindex(Ωs)-1] + Ωs[firstindex(Ωs)+1:lastindex(Ωs)])
+"""
+    creatematrix(qubit::Qubit, pulse::Pulse; phase::Float64=0.0, steps::Int=100)
 
-    H0 = hamiltonian()
-    ΔH = zeros(ComplexF64, levels(qubit), levels(qubit))
-    U = diag(ones(ComplexF64, level(qubit)))
-    for step in Base.range(steps)
-        ΔH
-    end
+Creates the matrix for the approximate unitary operator for a pulse acting on a qubit.
+Provide `phase` and `steps` as optional keyword arguments.
+"""
+function creatematrix(qubit::Qubit, pulse::Pulse; phase::Float64=0.0, steps::Int=100)
+    Ωs = shape(pulse; steps=steps)
+    Δt = width(pulse) / steps
+
+     # we need to average the pulse over intervals 
+     Ωs = 0.5 * (Ωs[firstindex(Ωs):lastindex(Ωs)-1] + Ωs[firstindex(Ωs)+1:lastindex(Ωs)])
+
+     U = diagm(ones(ComplexF64, levels(qubit)))
+     ΔH = zeros(ComplexF64, levels(qubit), levels(qubit))
+     V = exp(1im*phase)*qubit.a + exp(-1im*phase)*qubit.adag
+     for step in Base.OneTo(steps)
+        ΔH .= qubit.H0
+        ΔH .+= Ωs[step] .* V # does this create extra allocations to store mult result?
+        U = exp(-1im*Δt*ΔH) * U
+     end
+     return U
 end
+export creatematrix
+
 
 ### Square pulses 
 """
@@ -62,18 +73,16 @@ struct SquarePulse <: Pulse
     width::Float64
     amplitude::Float64
 
-    function SquarePulse(width::Float64=8e-8; amplitude::Float64=1.3e7)
-        return new(width, amplitude, phase)
+    function SquarePulse(width::Float64=8e-8, amplitude::Float64=1.3e7)
+        return new(width, amplitude)
     end
-    function SquarePulse(; width::Float64=8e-8, amplitude::Float64=1.3e7)
+    function SquarePulse(;width::Float64=8e-8, amplitude::Float64=1.3e7)
         return new(width, amplitude)
     end
 end
 export SquarePulse
 
 function shape(pulse::SquarePulse; steps::Int=100)
-    ts = Base.range(0, pulse.width, step=pulse.width/steps)
-    amps = pulse.amplitude*ones(Float64, steps+1)
-    return amps
+    return pulse.amplitude*ones(Float64, steps+1)
 end 
 

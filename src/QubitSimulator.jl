@@ -12,9 +12,9 @@ include("basis.jl")
 
 ### Qubits
 include("qubits/qubit.jl")
-#include("qubits/qubitcollection.jl")
+include("qubits/qubitcollection.jl")
 
 # Pulses
-#include("pulses/pulses.jl")
+include("pulses/pulses.jl")
 
 end
