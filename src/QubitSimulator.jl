@@ -15,6 +15,7 @@ include("qubits/qubit.jl")
 include("qubits/qubitcollection.jl")
 
 # Pulses
-include("pulses/pulses.jl")
+include("pulses/pulse.jl")
+include("pulses/square.jl")
 
 end

@@ -94,4 +94,19 @@
             @test isapprox(occs, exp.(-ts ./ T2))
         end
     end
+
+    @testset "interactionH" begin
+        qubit = randomqubit(2)
+        @test isapprox(interactionH(qubit, 0), [0 1; 1 0])
+        @test isapprox(interactionH(qubit, π/2), [0 1im; -1im 0])
+    end
+
+    @testset "interactionL" begin 
+        qubit = randomqubit(2)
+        X = [0 1; 1 0]
+        Y = [0 1im; -1im 0]
+        I = [1 0; 0 1]
+        @test isapprox(interactionL(qubit, 0), -1im*kron(X, I) + 1im*kron(I, X))
+        @test isapprox(interactionL(qubit, π/2), -1im*kron(Y, I) + 1im*kron(I, transpose(Y)))
+    end
 end

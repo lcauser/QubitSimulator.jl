@@ -103,9 +103,11 @@ function _calculate_L(liouville::LatticeTypes, η::Float64, T1::Float64, T2::Flo
     )
 end
 
+### Qubit properties 
 export levels 
 levels(qubit::Qubit) = qubit.n
 
+### Generating qubits
 export randomqubit
 function randomqubit(n::Int)
     # TODO: add keyword arguments for randomization
@@ -116,4 +118,30 @@ function randomqubit(n::Int)
         T1=220e-6+randn()*20e-6,
         T2=130e-6+randn()*10e-6
     )
+end
+
+### Calculations used for matrix-pulse interactions 
+export interactionH, interactionL
+"""
+    interactionH(qubit::Qubit, θ::Real)
+
+Calculate the Hamiltonian interaction term without the amplitude for a qubit interacting with
+a pulse with phase θ.
+"""
+function interactionH(qubit::Qubit, θ::Real)
+    return exp(1im*θ)*qubit.a + exp(-1im*θ)*qubit.adag
+end
+
+"""
+    interactionL(qubit::Qubit, θ::Real)
+
+Calculate the interaction term for the superoperator without the amplitude for a qubit
+interacting with a pulse with phase θ.
+"""
+function interactionL(qubit::Qubit, θ::Real)
+    Vham = interactionH(qubit, θ)
+    I = diagm(ones(levels(qubit)))
+    V = zeros(ComplexF64, levels(qubit)^2, levels(qubit)^2)
+    V += -1im*kron(Vham, I) + 1im*kron(I, transpose(Vham))
+    return V
 end
