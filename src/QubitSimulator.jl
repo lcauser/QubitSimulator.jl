@@ -14,8 +14,12 @@ include("basis.jl")
 include("qubits/qubit.jl")
 include("qubits/qubitcollection.jl")
 
-# Pulses
+### Pulses
 include("pulses/pulse.jl")
 include("pulses/square.jl")
+
+### Calibration 
+include("calibrate/calibrate.jl")
+include("calibrate/xcalibrate.jl")
 
 end

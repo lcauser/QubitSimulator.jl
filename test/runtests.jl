@@ -13,4 +13,9 @@ using LinearAlgebra
         include("unit/pulses/pulses.jl")
         include("unit/pulses/square.jl")
     end
+    
+    @testset "Calibrations" begin
+        include("unit/calibrate/calibrate.jl")
+        include("unit/calibrate/xcalibrate.jl")
+    end
 end
