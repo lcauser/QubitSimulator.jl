@@ -1,4 +1,4 @@
-@testset "Qubits" begin
+@testset "Qubit" begin
     @testset "levels" begin
         for i = 2:4
             begin
