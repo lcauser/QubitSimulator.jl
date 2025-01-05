@@ -49,7 +49,7 @@ function shape(::Pulse; steps::Int=100)
 end
 
 ### Determining the actions of pulses
-export createH0unitary
+export createH0unitary, createHeffunitary, createL0superop, createLsuperop
 
 """
     createH0unitary(qubit::Qubit, pulse::Pulse; phase::Float64=0.0, steps::Int=100)

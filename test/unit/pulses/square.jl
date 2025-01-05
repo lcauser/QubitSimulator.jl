@@ -100,4 +100,33 @@
             @test 1 - abs(U[1, 2]) < 5e-2
         end
     end
+
+    @testset "createHeffUnitary" begin
+        @testset "Heff-equals-H0-with-no-decoherence" begin
+            for n = 2:5
+                for phase = [0.0, π/2, π, 0.721]
+                    # set decay times to be very large so they're negliable
+                    qubit = Qubit(n; T1=1e10, T2=1e10) 
+                    pulse = SquarePulse()
+                    H0 = createH0unitary(qubit, pulse; phase=phase)
+                    Heff = createHeffunitary(qubit, pulse; phase=phase)
+                    @test isapprox(H0, Heff)
+                end
+            end
+        end
+    end
+
+    # TODO: determine better ways to super ops
+    @testset "createL0superop-equals-createLsuperop-with-no-decoherence" begin 
+        for n = 2:5
+            for phase = [0.0, π/2, π, 0.721]
+                # set decay times to be very large so they're negliable
+                qubit = Qubit(n; T1=1e10, T2=1e10) 
+                pulse = SquarePulse()
+                L0 = createL0superop(qubit, pulse; phase=phase)
+                L = createLsuperop(qubit, pulse; phase=phase)
+                @test isapprox(L0, L)
+            end
+        end
+    end
 end
