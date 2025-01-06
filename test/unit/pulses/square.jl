@@ -47,6 +47,15 @@
         @test isapprox(times[end], (w-δt)/2)
     end
 
+    @testset "defaultparameterrange" begin
+        width_grid = defaultparameterrange(SquarePulse(), :width, 51)
+        @test width_grid[begin] == 10 ^ QubitSimulator._square_width_min_exponent
+        @test width_grid[end] == 10 ^ QubitSimulator._square_width_max_exponent
+        amp_grid = defaultparameterrange(SquarePulse(), :amplitude, 51)
+        @test amp_grid[begin] == 10 ^ QubitSimulator._square_amp_min_exponent
+        @test amp_grid[end] == 10 ^ QubitSimulator._square_amp_max_exponent
+    end
+
     @testset "createH0unitary" begin 
         for n = 2:5
             @testset "createH0unitary-$(n)" begin

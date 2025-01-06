@@ -48,6 +48,11 @@ function shape(::Pulse; steps::Int=100)
     return zeros(ComplexF64, steps)
 end
 
+export defaultparameterrange
+function defaultparameterrange(pulse::Pulse, parameter::Symbol, steps::Int)
+    return nothing
+end
+
 ### Determining the actions of pulses
 export createH0unitary, createHeffunitary, createL0superop, createLsuperop
 

@@ -26,3 +26,27 @@ function shape(pulse::SquarePulse; steps::Int=100)
     return pulse.amplitude*ones(Float64, steps)
 end 
 
+# Default parameters for grid searching square pulses
+_square_width_min_exponent = -8.0
+_square_width_max_exponent = -6.0
+_square_amp_min_exponent = 6.0
+_square_amp_max_exponent = 9.0
+
+function defaultparameterrange(::SquarePulse, parameter::Symbol, steps::Int=100)
+    if parameter == :width
+        return 10.0 .^ Base.range(
+            start=_square_width_min_exponent,
+            stop=_square_width_max_exponent,
+            length=steps
+        )
+    elseif parameter == :amplitude 
+        return 10.0 .^ Base.range(
+            start=_square_amp_min_exponent,
+            stop=_square_amp_max_exponent,
+            length=steps
+        )
+    else
+        throw(ArgumentError("Parameter $(parameter) not known for SquarePulse."))
+    end
+end
+
