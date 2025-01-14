@@ -29,8 +29,8 @@ end
 # Default parameters for grid searching square pulses
 _square_width_min_exponent = -8.0
 _square_width_max_exponent = -6.0
-_square_amp_min_exponent = 6.0
-_square_amp_max_exponent = 9.0
+_square_amp_min_exponent = 5.0
+_square_amp_max_exponent = 8.0
 
 function defaultparameterrange(::SquarePulse, parameter::Symbol, steps::Int=100)
     if parameter == :width
@@ -39,6 +39,7 @@ function defaultparameterrange(::SquarePulse, parameter::Symbol, steps::Int=100)
             stop=_square_width_max_exponent,
             length=steps
         )
+        return _square_width_cycle_time:_square_width_cycle_time
     elseif parameter == :amplitude 
         return 10.0 .^ Base.range(
             start=_square_amp_min_exponent,

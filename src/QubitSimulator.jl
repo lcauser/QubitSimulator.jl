@@ -21,5 +21,5 @@ include("pulses/square.jl")
 ### Calibration 
 include("calibrate/calibrate.jl")
 include("calibrate/xcalibrate.jl")
-
+include("calibrate/gridsearch.jl")
 end

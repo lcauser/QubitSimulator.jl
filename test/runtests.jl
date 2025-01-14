@@ -17,5 +17,6 @@ using LinearAlgebra
     @testset "Calibrations" begin
         include("unit/calibrate/calibrate.jl")
         include("unit/calibrate/xcalibrate.jl")
+        include("unit/calibrate/gridsearch.jl")
     end
 end
